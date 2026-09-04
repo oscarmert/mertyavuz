@@ -284,7 +284,7 @@
           var dy = nodes[a].y - nodes[b].y;
           var dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < MAX_DIST) {
-            ctx.strokeStyle = "rgba(94, 234, 212, " + (0.16 * (1 - dist / MAX_DIST)) + ")";
+            ctx.strokeStyle = "rgba(0, 255, 106, " + (0.18 * (1 - dist / MAX_DIST)) + ")";
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(nodes[a].x, nodes[a].y);
@@ -295,7 +295,7 @@
       }
 
       for (var j = 0; j < nodes.length; j++) {
-        ctx.fillStyle = "rgba(129, 140, 248, 0.6)";
+        ctx.fillStyle = "rgba(0, 255, 106, 0.65)";
         ctx.beginPath();
         ctx.arc(nodes[j].x, nodes[j].y, 1.6, 0, Math.PI * 2);
         ctx.fill();
