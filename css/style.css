@@ -416,6 +416,71 @@ body.lang-mode-en .lang-toggle .lang-opt[data-lang="en"] {
   50%, 100% { opacity: 0; }
 }
 
+/* ==========================================================================
+   KOD TERMİNALİ — deneysel bölüm (kolayca geri alınabilir)
+   Kaldırmak için: bu blok ile eşleşen "/KOD TERMİNALİ" yorumuna kadar
+   olan CSS'i sil. HTML tarafı index.html'de, JS tarafı js/script.js
+   içinde aynı şekilde işaretli.
+   ========================================================================== */
+
+.code-terminal-section {
+  padding: 56px 0 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.code-terminal-wrap {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.code-terminal {
+  margin: 0 auto;
+}
+
+.code-terminal-body {
+  max-height: 300px;
+  overflow: hidden;
+  padding: 18px 18px 20px;
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+.code-terminal-body .term-line {
+  min-height: 1.65em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.code-terminal-body .term-line.term-file {
+  color: var(--accent-2);
+  opacity: 0.85;
+  margin-top: 10px;
+  font-weight: 600;
+}
+.code-terminal-body .term-line.term-file:first-child { margin-top: 0; }
+
+.code-terminal-body .term-line.term-code {
+  color: #6dffa0;
+}
+
+.code-terminal .terminal-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .code-terminal-body { max-height: 240px; font-size: 11px; padding: 15px 15px 17px; }
+  .code-terminal .terminal-title { max-width: 150px; min-width: 0; }
+}
+
+/* ==========================================================================
+   /KOD TERMİNALİ
+   ========================================================================== */
+
 .eyebrow {
   color: var(--accent);
   font-family: var(--font-mono);

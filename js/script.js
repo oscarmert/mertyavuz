@@ -95,6 +95,139 @@
     typeChar();
   }
 
+  /* ==========================================================================
+     KOD TERMİNALİ — deneysel bölüm (kolayca geri alınabilir)
+     Kaldırmak için: bu blok ile eşleşen "/KOD TERMİNALİ" yorumuna kadar olan
+     kodu sil, ve dosyanın en altındaki initCodeTerminal() çağrısını kaldır.
+     HTML tarafı index.html'de, CSS tarafı css/style.css içinde aynı şekilde
+     işaretli.
+     ========================================================================== */
+
+  var CODE_TERMINAL_LINES = [
+    { file: "index.html" },
+    { code: "<!doctype html>" },
+    { code: '<html lang="tr">' },
+    { code: '<h1 data-text="Mert Yavuz">Mert Yavuz</h1>' },
+    { code: '<span class="lang-tr">Network Specialist</span>' },
+    { code: '<div class="hero-terminal" aria-hidden="true">' },
+    { code: '<pre class="terminal-body" id="terminal-body"></pre>' },
+    { code: '<section class="section" id="about">' },
+    { code: '<p class="section-label">01</p>' },
+    { code: '<div class="marquee-track">' },
+    { code: '<span class="marquee-item">Python</span>' },
+    { code: '<a href="assets/Mert-Yavuz-CV.pdf" download>' },
+    { code: '<div class="timeline-item reveal">' },
+    { file: "css/style.css" },
+    { code: ":root {" },
+    { code: "  --accent: #00ff6a;" },
+    { code: "  --bg: #060907;" },
+    { code: "  --font-mono: 'SF Mono', 'Fira Code', monospace;" },
+    { code: "}" },
+    { code: ".hero-terminal {" },
+    { code: "  background: #050805;" },
+    { code: "  border: 1px solid var(--card-border);" },
+    { code: "}" },
+    { code: "@keyframes term-blink {" },
+    { code: "  0%, 49% { opacity: 1; }" },
+    { code: "  50%, 100% { opacity: 0; }" },
+    { code: "}" },
+    { code: "body::after { /* CRT tarama çizgileri */" },
+    { code: "  mix-blend-mode: overlay;" },
+    { code: "}" },
+    { file: "js/script.js" },
+    { code: "function prefersReducedMotion() {" },
+    { code: "  return window.matchMedia(" },
+    { code: '    "(prefers-reduced-motion: reduce)"' },
+    { code: "  ).matches;" },
+    { code: "}" },
+    { code: "function typeTerminal(lang) {" },
+    { code: '  var el = document.getElementById("terminal-body");' },
+    { code: "  if (!el) return;" },
+    { code: "}" },
+    { code: "function applyLang(lang) {" },
+    { code: '  body.classList.add("lang-mode-en");' },
+    { code: "  renderProjects(lang);" },
+    { code: "}" },
+    { code: "function renderProjects(lang) {" },
+    { code: "  observeReveals();" },
+    { code: "}" },
+    { code: "initHeroCanvas();" },
+    { code: "observeReveals();" },
+    { code: "initScrollspy();" },
+    { code: "initScrollTop();" }
+  ];
+
+  function initCodeTerminal() {
+    var el = document.getElementById("code-terminal-body");
+    if (!el) return;
+
+    function makeLineEl(line) {
+      var div = document.createElement("div");
+      if (line.file) {
+        div.className = "term-line term-file";
+        div.setAttribute("data-full", "// " + line.file);
+      } else {
+        div.className = "term-line term-code";
+        div.setAttribute("data-full", line.code);
+      }
+      return div;
+    }
+
+    if (prefersReducedMotion()) {
+      CODE_TERMINAL_LINES.slice(0, 14).forEach(function (line) {
+        var div = makeLineEl(line);
+        div.textContent = div.getAttribute("data-full");
+        el.appendChild(div);
+      });
+      return;
+    }
+
+    var idx = 0;
+    var charIdx = 0;
+    var lineEl = null;
+    var paused = false;
+    var codeTimer = null;
+
+    function step() {
+      if (paused) return;
+
+      if (!lineEl) {
+        var line = CODE_TERMINAL_LINES[idx % CODE_TERMINAL_LINES.length];
+        idx++;
+        lineEl = makeLineEl(line);
+        el.appendChild(lineEl);
+        charIdx = 0;
+        while (el.children.length > 60) {
+          el.removeChild(el.firstChild);
+        }
+      }
+
+      var full = lineEl.getAttribute("data-full");
+      charIdx++;
+      lineEl.textContent = full.slice(0, charIdx);
+      el.scrollTop = el.scrollHeight;
+
+      if (charIdx >= full.length) {
+        var isFile = lineEl.className.indexOf("term-file") > -1;
+        lineEl = null;
+        codeTimer = setTimeout(step, isFile ? 260 : 90);
+      } else {
+        codeTimer = setTimeout(step, 9);
+      }
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      paused = document.hidden;
+      if (!paused) step();
+    });
+
+    step();
+  }
+
+  /* ==========================================================================
+     /KOD TERMİNALİ
+     ========================================================================== */
+
   /* ---- Dil (TR / EN) --------------------------------------------------- */
 
   var body = document.body;
@@ -411,4 +544,5 @@
   observeReveals();
   initScrollspy();
   initScrollTop();
+  initCodeTerminal(); // KOD TERMİNALİ — kaldırmak için initCodeTerminal tanımıyla birlikte sil
 })();
